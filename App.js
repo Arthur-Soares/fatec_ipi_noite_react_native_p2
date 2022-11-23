@@ -3,11 +3,13 @@ import { StyleSheet, TextInput, StatusBar, Alert, ScrollView, Text } from 'react
 import React, { useState, useEffect } from "react";
 import { Tab, TabView, Button, ListItem, Image } from "@rneui/themed";
 import PesquisaClima from "./telas/PesquisaClimaTela";
-import ClimaHistorico from "./telas/ClimaHistoricoTela";
-import { BackgroundImage } from '@rneui/base';
+
 
 import background from './img/rainy-day-behind-window.jpg';
 import background2 from './img/rain-animated.jpg';
+
+
+import axios from 'axios'
 
 export default function App() {
   useEffect(() => {
@@ -24,9 +26,9 @@ export default function App() {
 
   const getCidade = (cidade) => {
 
-    if(cidade == 'Salvador'){
+    if (cidade == 'Salvador') {
       cidade += ',br'
-    }   
+    }
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&APPID=fe1d134bae594b6a9e1bdbabb5f242c2&units=metric&lang=pt`;
     //const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&appid=0a2f38e7438699b0ead786a746a9d6fb&units=metric&lang=pt`;
     //const url = `https://api.openweathermap.org/geo/1.0/direct?q=${cidade}&limit=1`;
@@ -43,6 +45,17 @@ export default function App() {
         };
         setCidadeEscolhida(model);
         criarHistorico(model);
+
+
+
+
+        const date = new Date();
+        const hoje = date.toLocaleDateString('pt-BR').toString();
+       
+        //link para envio do POST para gravar a cidade e a data da pesquisa
+        axios.post(`https://g10c8b6cd02b6ff-ooap2xcgl6ldo9nh.adb.sa-saopaulo-1.oraclecloudapps.com/ords/admin/historico/?cidade=${cidade}&data_historico=${hoje}`
+        )
+
       })
       .catch(() => {
         Alert.alert("Erro", "Não foi possivel carregar os dados dessa cidade");
@@ -101,7 +114,7 @@ export default function App() {
       <TabView value={index} onChange={setIndex} animationType="spring">
         <TabView.Item style={{ width: "100%", backgroundImage: `url(${background})` }}>
           <ScrollView>
-            <Text style={{ padding: 14, fontSize: 30, textAlign: 'center', fontWeight: 'bold', color: 'white'}}>Bem vindo ao projeto Clima-Histórico!</Text>
+            <Text style={{ padding: 14, fontSize: 30, textAlign: 'center', fontWeight: 'bold', color: 'white' }}>Bem vindo ao projeto Clima-Histórico!</Text>
             <TextInput
               gti
               style={{
@@ -112,11 +125,11 @@ export default function App() {
                 marginHorizontal: 10,
                 marginVertical: 10,
                 width: "50%",
-                alignSelf: 'center',                
+                alignSelf: 'center',
                 fontSize: 18,
-                color: 'white',              
+                color: 'white',
               }}
-              placeholder ="Digite uma cidade..."
+              placeholder="Digite uma cidade..."
               onChangeText={capturarTexto}
               value={cidade}
             />
@@ -127,7 +140,7 @@ export default function App() {
                 borderWidth: 0,
                 borderRadius: 20,
                 width: "20%",
-                alignSelf: 'center'                
+                alignSelf: 'center'
               }}
               containerStyle={{
                 marginHorizontal: 50,
@@ -137,13 +150,14 @@ export default function App() {
               title="Pesquisar"
               onPress={() => getCidade(cidade)}
             />
-  
-            {cidadeEscolhida && <PesquisaClima cidade={cidadeEscolhida}></PesquisaClima>}
+
+            {cidadeEscolhida && <PesquisaClima cidade={cidadeEscolhida} />}
           </ScrollView>
         </TabView.Item>
+        
         <TabView.Item style={{ width: "100%", backgroundImage: `url(${background2})` }}>
           <ScrollView>
-          <Text style={{ padding: 14, fontSize: 30, textAlign: 'center', fontWeight: 'bold', color: 'white'}}>Histórico de Climas</Text>
+            <Text style={{ padding: 14, fontSize: 30, textAlign: 'center', fontWeight: 'bold', color: 'white' }}>Histórico de Climas</Text>
             ({/*
             {historico.map((item) => (
               <ListItem key={item.cod_prev}>
