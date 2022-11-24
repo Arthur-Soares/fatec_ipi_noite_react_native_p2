@@ -6,17 +6,16 @@ import PesquisaClima from "./telas/PesquisaClimaTela";
 import ClimaHistorico from './telas/ClimaHistorico';
 
 import background from './img/rainy-day-behind-window.jpg';
-import background2 from './img/rain-animated.jpg';
+
 
 
 import axios from 'axios'
 
 export default function App() {
-  useEffect(() => {
-    getHistorico();
-  }, []);
+
 
   const [index, setIndex] = useState(0);
+
   const capturarTexto = (cidadeDigitada) => {
     setCidade(cidadeDigitada);
   };
@@ -30,8 +29,7 @@ export default function App() {
       cidade += ',br'
     }
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&APPID=fe1d134bae594b6a9e1bdbabb5f242c2&units=metric&lang=pt`;
-    //const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&appid=0a2f38e7438699b0ead786a746a9d6fb&units=metric&lang=pt`;
-    //const url = `https://api.openweathermap.org/geo/1.0/direct?q=${cidade}&limit=1`;
+    
     fetch(url)
       .then((resposta) => resposta.json())
       .then((json) => {
@@ -45,9 +43,6 @@ export default function App() {
         };
         setCidadeEscolhida(model);
         criarHistorico(model);
-
-
-
 
         const date = new Date();
         const hoje = date.toLocaleDateString('pt-BR').toString();
@@ -68,33 +63,9 @@ export default function App() {
       data: model.data.getDate() + "/" + model.data.getMonth(),
       link: null, //colocar o link do icone posteriormente
     };
-
-    const url =
-      "https://g6ca8cb0cf67636-pessoahobbiesrest.adb.sa-saopaulo-1.oraclecloudapps.com/ords/admin/bossini/";
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    }).then((data) => {
-      getHistorico();
-    });
   };
 
-  const getHistorico = () => {
-    const url =
-      "https://g6ca8cb0cf67636-pessoahobbiesrest.adb.sa-saopaulo-1.oraclecloudapps.com/ords/admin/bossini/";
-
-    fetch(url)
-      .then((resposta) => resposta.json())
-      .then((json) => {
-        if (json.items.length > 0) {
-          setHistorico(json.items.reverse());
-        }
-      });
-  };
+  
 
   return (
     <>
@@ -103,7 +74,7 @@ export default function App() {
         onChange={(e) => setIndex(e)}
         indicatorStyle={{
           backgroundColor: "white",
-          height: 3,
+          height: 1,
         }}
         variant="primary"
       >
@@ -111,7 +82,7 @@ export default function App() {
         <Tab.Item title="Histórico" titleStyle={{ fontSize: 16 }} />
       </Tab>
 
-      <TabView value={index} onChange={setIndex} animationType="spring">
+      <TabView value={index} onChange={setIndex} animationType="timing">
         <TabView.Item style={{ width: "100%", backgroundImage: `url(${background})` }}>
           <ScrollView>
             <Text style={{ padding: 14, fontSize: 30, textAlign: 'center', fontWeight: 'bold', color: 'white' }}>Bem vindo ao projeto Clima-Histórico!</Text>
@@ -157,9 +128,9 @@ export default function App() {
 
         <TabView.Item style={{ width: "100%" }}>
           <ScrollView>
-            
-             <ClimaHistorico />
-            
+
+            <ClimaHistorico />
+
 
           </ScrollView>
         </TabView.Item>
