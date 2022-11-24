@@ -3,7 +3,7 @@ import { StyleSheet, TextInput, StatusBar, Alert, ScrollView, Text } from 'react
 import React, { useState, useEffect } from "react";
 import { Tab, TabView, Button, ListItem, Image } from "@rneui/themed";
 import PesquisaClima from "./telas/PesquisaClimaTela";
-
+import ClimaHistorico from './telas/ClimaHistorico';
 
 import background from './img/rainy-day-behind-window.jpg';
 import background2 from './img/rain-animated.jpg';
@@ -16,7 +16,7 @@ export default function App() {
     getHistorico();
   }, []);
 
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = useState(0);
   const capturarTexto = (cidadeDigitada) => {
     setCidade(cidadeDigitada);
   };
@@ -51,7 +51,7 @@ export default function App() {
 
         const date = new Date();
         const hoje = date.toLocaleDateString('pt-BR').toString();
-       
+
         //link para envio do POST para gravar a cidade e a data da pesquisa
         axios.post(`https://g10c8b6cd02b6ff-ooap2xcgl6ldo9nh.adb.sa-saopaulo-1.oraclecloudapps.com/ords/admin/historico/?cidade=${cidade}&data_historico=${hoje}`
         )
@@ -154,17 +154,13 @@ export default function App() {
             {cidadeEscolhida && <PesquisaClima cidade={cidadeEscolhida} />}
           </ScrollView>
         </TabView.Item>
-        
-        <TabView.Item style={{ width: "100%", backgroundImage: `url(${background2})` }}>
+
+        <TabView.Item style={{ width: "100%" }}>
           <ScrollView>
-            <Text style={{ padding: 14, fontSize: 30, textAlign: 'center', fontWeight: 'bold', color: 'white' }}>Histórico de Climas</Text>
-            ({/*
-            {historico.map((item) => (
-              <ListItem key={item.cod_prev}>
-                <ClimaHistorico consulta={item}></ClimaHistorico>
-              </ListItem>
-            ))}
-            */})
+            
+             <ClimaHistorico />
+            
+
           </ScrollView>
         </TabView.Item>
       </TabView>
