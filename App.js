@@ -1,10 +1,8 @@
 import { StyleSheet, TextInput, FlatList, Alert, Text, ScrollView } from 'react-native';
-
 import React, { useState, useEffect } from "react";
 import { Tab, TabView, Button, ListItem, Image } from "@rneui/themed";
 import PesquisaClima from "./telas/PesquisaClimaTela";
-
-
+import styles from "./telas/styles"
 import background from './img/rainy-day-behind-window.jpg';
 
 
@@ -12,6 +10,8 @@ import background from './img/rainy-day-behind-window.jpg';
 
 
 export default function App() {
+
+  //Variavel de estado do Histórico, sempre que o App for carregado um Hook chamara o histórico na tela histórico
   useEffect(() => {
     getHistorico();
   }, []);
@@ -21,10 +21,12 @@ export default function App() {
   const capturarTexto = (cidadeDigitada) => {
     setCidade(cidadeDigitada);
   };
+
+  //variaveis de inserção
   const [cidade, setCidade] = useState("");
   const [cidadeEscolhida, setCidadeEscolhida] = useState(null);
   const [historico, setHistorico] = useState([]);
-  
+
   const getCidade = (cidade) => {
 
     if (cidade == 'Salvador') {
@@ -48,21 +50,16 @@ export default function App() {
       })
       .catch(() => {
         Alert.alert("Erro", "Não foi possivel carregar os dados dessa cidade");
-      }).finally(
-
-
-    );
+      });
 
   };
 
 
   const criarHistorico = (model) => {
 
-    const mes = model.data.getMonth() + 1;
-
+    //criando o REQUEST para fazer o post com os dados da cidade e a data da pesquisa
+    const mes = model.data.getMonth() + 1; //mes +1 pois o metodo getMonth tras o index dos meses começando em ZERO
     const request = {
-
-
       cidade: model.cidade,
       data_historico: model.data.getDate() + "/" + mes + "/" + model.data.getFullYear(),
 
@@ -71,6 +68,7 @@ export default function App() {
     const url =
       "https://g10c8b6cd02b6ff-ooap2xcgl6ldo9nh.adb.sa-saopaulo-1.oraclecloudapps.com/ords/admin/historico/";
 
+    //realizando o POST com o método Fetch na oracle cloud
     fetch(url, {
       method: "POST",
       headers: {
@@ -78,14 +76,17 @@ export default function App() {
       },
       body: JSON.stringify(request),
     }).then((data) => {
+      //depois que o post for realizado chamar a função getHistórico para que seja atualizada a lista
       getHistorico();
     });
   };
 
 
+  //trazendo os dados da oracle cloud com método fetch 
   const getHistorico = () => {
     const url =
       "https://g10c8b6cd02b6ff-ooap2xcgl6ldo9nh.adb.sa-saopaulo-1.oraclecloudapps.com/ords/admin/historico/";
+
 
     fetch(url)
       .then((resposta) => resposta.json())
@@ -95,10 +96,6 @@ export default function App() {
         }
       });
   };
-
-
-
-
 
   return (
     <>
@@ -118,39 +115,17 @@ export default function App() {
       <TabView value={index} onChange={setIndex} animationType="timing">
         <TabView.Item style={{ width: "100%", backgroundImage: `url(${background})` }}>
           <ScrollView>
-            <Text style={{ padding: 14, fontSize: 30, textAlign: 'center', fontWeight: 'bold', color: 'white' }}>Bem vindo ao projeto Clima-Histórico!</Text>
+            <Text style={styles.tituloPag}>Bem vindo ao projeto Clima-Histórico!</Text>
             <TextInput
               gti
-              style={{
-                borderBottomColor: "#CCC",
-                borderBottomWidth: 2,
-                padding: 12,
-                marginBottom: 4,
-                marginHorizontal: 10,
-                marginVertical: 10,
-                width: "50%",
-                alignSelf: 'center',
-                fontSize: 18,
-                color: 'white',
-              }}
+              style={styles.input}
               placeholder="Digite uma cidade..."
               onChangeText={capturarTexto}
               value={cidade}
             />
             <Button
-              buttonStyle={{
-                backgroundColor: "rgba(90, 154, 230, 1)",
-                borderColor: "transparent",
-                borderWidth: 0,
-                borderRadius: 20,
-                width: "20%",
-                alignSelf: 'center'
-              }}
-              containerStyle={{
-                marginHorizontal: 50,
-                marginVertical: 10,
-                paddingBottom: 40
-              }}
+              buttonStyle={styles.btn}
+              containerStyle={styles.cont}
               title="Pesquisar"
               onPress={() => getCidade(cidade)}
             />
@@ -159,15 +134,17 @@ export default function App() {
           </ScrollView>
         </TabView.Item>
 
+
+
         <TabView.Item style={{ width: "100%", backgroundColor: "rgba(90, 154, 230, 1)" }}>
           <ScrollView>
-          <Text style={{ padding: 14, fontSize: 30, textAlign: 'center', fontWeight: 'bold', color: 'white' }}>Histórico</Text>
+            <Text style={styles.tituloPag}>Histórico</Text>
             <FlatList
 
               data={historico}
               keyExtractor={(item) => item.cod_historico}
               renderItem={({ item }) => (
-                
+
                 <ListItem containerStyle={styles.listItemContainer}>
                   <ListItem.Content  >
                     <Text style={styles.text}>
@@ -186,35 +163,3 @@ export default function App() {
     </>
   );
 }
-
-
-
-
-export const styles = StyleSheet.create({
-  container: {
-    textAlign: 'center'
-  },
-  listItemContainer: {
-    backgroundColor: 'rgba(90, 154, 230, 1)',
-    borderColor: 'black',
-    borderWidth: 1,
-    borderRadius: 10,
-
-    width: 400,
-    marginLeft: 470,
-    marginBottom: 30,
-
-    marginTop: 30
-  },
-  cidade: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginLeft: 20,
-
-    color: 'white'
-  },
-  data: {
-    color: 'white'
-  }
-
-});

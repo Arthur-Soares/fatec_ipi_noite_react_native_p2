@@ -1,20 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-/*
-axios.post('/user', {
-  firstName: 'Santos',
-  lastName: 'Dumont'
-})
-.then(function (response) {
-  console.log(response);
-})
-.catch(function (error) {
-  console.error(error);
-});*/
-
-
-
 export default function Clima({ cidade }) {
 
 
