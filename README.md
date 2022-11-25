@@ -9,5 +9,3 @@
  ✅ npx expo install expo-status-bar
 
  ✅ npm install @rneui/themed @rneui/base
-
- ✅ npm install axios

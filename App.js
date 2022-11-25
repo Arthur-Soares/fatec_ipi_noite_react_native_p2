@@ -12,17 +12,9 @@ import background from './img/rainy-day-behind-window.jpg';
 
 
 export default function App() {
-
-
-
-
   useEffect(() => {
     getHistorico();
   }, []);
-
-
-
-
 
   const [index, setIndex] = useState(0);
 
@@ -32,13 +24,7 @@ export default function App() {
   const [cidade, setCidade] = useState("");
   const [cidadeEscolhida, setCidadeEscolhida] = useState(null);
   const [historico, setHistorico] = useState([]);
-
-
-
-
-
-
-
+  
   const getCidade = (cidade) => {
 
     if (cidade == 'Salvador') {
