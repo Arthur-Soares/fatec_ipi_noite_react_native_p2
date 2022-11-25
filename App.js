@@ -146,7 +146,7 @@ export default function App() {
               renderItem={({ item }) => (
 
                 <ListItem containerStyle={styles.listItemContainer}>
-                  <ListItem.Content  >
+                  <ListItem.Content>
                     <Text style={styles.text}>
 
                       <Text style={styles.data}>{item.data_historico}</Text>

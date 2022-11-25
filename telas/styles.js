@@ -7,10 +7,9 @@ export const styles = StyleSheet.create({
       backgroundColor: 'rgba(90, 154, 230, 1)',
       borderColor: 'black',
       borderWidth: 1,
-      borderRadius: 10,
-  
+      borderRadius: 10,  
       width: 400,
-      marginLeft: 470,
+      margin: 'auto',
       marginBottom: 30,
   
       marginTop: 30
